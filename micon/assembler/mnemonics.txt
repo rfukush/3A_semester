@@ -1,0 +1,146 @@
+#
+# ATMEL AVR series microcontroller instruction table
+#
+#	r = source register id
+#	d = destination register id
+#	D = destination register pair (one of 24-25, 26-27, 28-29, 30-31)
+#	k = displacement from $+1
+#	K = constant "K"
+#	s = bit number (0..7) of flag register
+#
+#mnemonic	opcode			desc
+NOP		0000:0000:0000:0000	# no operation
+MOVW		0000:0001:dddd:rrrr	# copy register word (pair to pair)
+MULS		0000:0010:dddd:rrrr	# multiply signed, R1:R0 = Rd * Rr
+MULSU		0000:0011:0ddd:0rrr	# multiply, s16 = s8 * u8
+FMUL		0000:0011:0ddd:1rrr	# fractional multiply, unsigned
+FMULS		0000:0011:1ddd:0rrr	# fractional multiply, signed
+FMULSU		0000:0011:1ddd:1rrr	# fractional multiply, s16 = s8 * u8
+CPC		0000:01rd:dddd:rrrr	# compare with carry
+SBC		0000:10rd:dddd:rrrr	# subtract with carry (borrow)
+ADD		0000:11rd:dddd:rrrr	# add without carry
+LSL		0000:11dd:dddd:dddd	# logical shift left (= ADD Rd,Rd)
+CPSE		0001:00rd:dddd:rrrr	# compare and skip if equal
+CP		0001:01rd:dddd:rrrr	# compare withoout carry
+SUB		0001:10rd:dddd:rrrr	# sub w/o carry
+ADC		0001:11rd:dddd:rrrr	# add with carry
+ROL		0001:11dd:dddd:dddd	# rotate left thru C (= ADC Rd,Rd)
+AND		0010:00rd:dddd:rrrr	# logical AND
+TST		0010:00dd:dddd:dddd	# TEST (= AND Rd,Rd)
+EOR		0010:01rd:dddd:rrrr	# exclusive OR
+CLR		0010:01dd:dddd:dddd	# clear register (= XOR Rd,Rd)
+OR		0010:10rd:dddd:rrrr	# inclusive OR
+MOV		0010:11rd:dddd:rrrr	# copy register
+CPI		0011:KKKK:dddd:KKKK	# compare with immediate
+SBCI		0100:KKKK:dddd:KKKK	# subtract immediate with carry
+SUBI		0101:KKKK:dddd:KKKK	# subtract immediate w/o carry
+ORI		0110:KKKK:dddd:KKKK	# logical OR with immediate (R16--R31)
+SBR		0110:KKKK:dddd:KKKK	# set bit register (= ORI)
+ANDI		0111:KKKK:dddd:KKKK	# logical AND with immediate
+LDD.Rd.Z+q	10q0:qq0d:dddd:0qqq	# indirect load w/displacement q
+LDD.Rd.Y+q	10q0:qq0d:dddd:1qqq	# indirect load w/displacement q
+STD.Z+q.Rr	10q0:qq1r:rrrr:0qqq
+STD.Y+q.Rr	10q0:qq1r:rrrr:1qqq
+LD.Rd.Z		1000:000d:dddd:0000	# indirect load via Z
+LD.Rd.Y		1000:000d:dddd:1000	# indirect load via Y
+ST.Z.Rr		1000:001r:rrrr:0000
+ST.Y.Rr		1000:001r:rrrr:1000
+LDS		kkkk:kkkk:kkkk:kkkk:1001:000d:dddd:0000	# load direct
+STS		kkkk:kkkk:kkkk:kkkk:1001:001d:dddd:0000 # store direct
+LD.Rd.Z++	1001:000d:dddd:0001	# indirect load w/post-inc
+LD.Rd.--Z	1001:000d:dddd:0010	# indirect load w/pre-dec
+LPM.Rd.Z	1001:000d:dddd:0100	# load program memory
+LPM.Rd.Z++	1001:000d:dddd:0101	# load program memory
+ELPM.Rd.Z	1001:000d:dddd:0110	# extended load program memory
+ELPM.Rd.Z++	1001:000d:dddd:0111	# extended load program memory
+LD.Rd.Y++	1001:000d:dddd:1001	# indirect load w/post-increment
+LD.Rd.--Y	1001:000d:dddd:1010	# indirect load w/pre-decrement
+LD.Rd.X		1001:000d:dddd:1100	# indirect load
+LD.Rd.X++	1001:000d:dddd:1101	# indirect load w/post-increment
+LD.Rd.--X	1001:000d:dddd:1110	# indirect load w/pre-decrement
+POP		1001:000d:dddd:1111	# pop register from stack (Rd = [++SP])
+ST.Z++.Rr	1001:001r:rrrr:0001
+ST.--Z.Rr	1001:001r:rrrr:0010
+ST.Y++.Rr	1001:001r:rrrr:1001
+ST.--Y.Rr	1001:001r:rrrr:1010
+ST.X.Rr		1001:001r:rrrr:1100
+ST.X++.Rr	1001:001r:rrrr:1101
+ST.--X.Rr	1001:001r:rrrr:1110
+PUSH		1001:001d:dddd:1111	# push register on stack ([SP--] = Rd)
+COM		1001:010d:dddd:0000	# complement (= logical NOT)
+SWAP		1001:010d:dddd:0010	# swap nibbles
+LSR		1001:010d:dddd:0110	# logical shift right
+ROR		1001:010d:dddd:0111	# rotate right thru carry
+DEC		1001:010d:dddd:1010	# decrement
+BSET		1001:0100:0sss:1000	# bit set in FLAGS
+SEC		1001:0100:0000:1000	# set carry
+SEZ		1001:0100:0001:1000	# set zero
+SEN		1001:0100:0010:1000	# set negative
+SEV		1001:0100:0011:1000	# set overflow
+SES		1001:0100:0100:1000	# set signed
+SEH		1001:0100:0101:1000	# set H
+SET		1001:0100:0110:1000	# set T
+SEI		1001:0100:0111:1000	# set interrupt enable
+BCLR		1001:0100:1sss:1000	# bit clear from FLAGS
+CLC		1001:0100:1000:1000	# clear carry flag
+CLZ		1001:0100:1001:1000	# clear zero flag
+CLN		1001:0100:1010:1000	# clear negative flag
+CLV		1001:0100:1011:1000	# clear overflow flag
+CLS		1001:0100:1100:1000	# clear signed flag
+CLH		1001:0100:1101:1000	# clear half-carry flag
+CLT		1001:0100:1110:1000	# clear temporary flag
+CLI		1001:0100:1111:1000	# clear interrupt enable
+NEG		1001:010d:dddd:0001	# negate signed
+INC		1001:010d:dddd:0011	# increment register
+ASR		1001:010d:dddd:0101	# arithmetic shift right
+IJMP		1001:0100:0000:1001	# indirect jump
+EIJMP		1001:0100:0001:1001	# extended indirect long jump
+RET		1001:0101:0000:1000	# return from call
+RETI		1001:0101:0001:1000	# return from interrupt
+ICALL		1001:0101:0000:1001	# indirect call
+EICALL		1001:0101:0001:1001	# extended indirect long call
+SLEEP		1001:0101:1000:1000	# sleep mode
+WDR		1001:0101:1010:1000	# watch dog reset
+LPM.R0		1001:0101:1100:1000	# load program memory (R0)
+ELPM.R0		1001:0101:1101:1000	# extended load program memory (R0)
+SPM		1001:0101:1110:1000	# store program memory
+ESPM		1001:0101:1111:1000	# extended store program memory
+JMP		kkkk:kkkk:kkkk:kkkk:1001:010k:kkkk:110k		# absolute jump
+CALL		kkkk:kkkk:kkkk:kkkk:1001:010k:kkkk:111k		# absolute call
+ADIW		1001:0110:KKDD:KKKK	# add immediate to word
+SBIW		1001:0111:KKdd:KKKK	# sub immediate from word
+CBI		1001:1000:AAAA:Abbb	# clear bit in I/O register
+SBIC		1001:1001:AAAA:Abbb	# skip if bit cleared in I/O register
+SBI		1001:1010:AAAA:Abbb	# set bit in I/O register
+SBIS		1001:1011:AAAA:Abbb	# skip if bit set in I/O register
+MUL		1001:11rd:dddd:rrrr	# multiply unsigned, R1:R0 = Rd * Rr
+IN		1011:0AAd:dddd:AAAA	# load from I/O port to register
+OUT		1011:1AAr:rrrr:AAAA	# store to I/O port from register
+RJMP		1100:kkkk:kkkk:kkkk	# relative jump
+RCALL		1101:kkkk:kkkk:kkkk	# relative call
+LDI		1110:KKKK:dddd:KKKK	# load immediate (R16--R31)
+SER		1110:1111:dddd:1111	# set register to 255
+BLD		1111:100d:dddd:0bbb	# bit load from T flag
+BRBC		1111:01kk:kkkk:ksss	# branch if bit cleared
+BRBS		1111:00kk:kkkk:ksss	# branch if bit set
+BRCC		1111:01kk:kkkk:k000	# branch if carry cleared (alias)
+BRCS		1111:00kk:kkkk:k000	# branch if carry set (alias)
+BREQ		1111:00kk:kkkk:k001	# branch if equal (alias)
+BRGE		1111:01kk:kkkk:k100	# branch if greater or equal (alias)
+BRHC		1111:01kk:kkkk:k101	# branch if half-carry cleared (alias)
+BRHS		1111:00kk:kkkk:k101	# branch if half-carry set (alias)
+BRID		1111:01kk:kkkk:k111	# branch if interrupt disabled (alias)
+BRIE		1111:00kk:kkkk:k111	# branch if interrupt enabled (alias)
+BRLO		1111:00kk:kkkk:k000	# branch if below / lower (alias)
+BRLT		1111:00kk:kkkk:k100	# branch if less than (alias)
+BRMI		1111:00kk:kkkk:k010	# branch if minus (alias)
+BRNE		1111:01kk:kkkk:k001	# branch if not equal (alias)
+BRPL		1111:01kk:kkkk:k010	# branch if plus (alias)
+BRSH		1111:01kk:kkkk:k000	# branch if above or equal (alias)
+BRTC		1111:01kk:kkkk:k110	# branch if flag T cleared (alias)
+BRTS		1111:00kk:kkkk:k110	# branch if flag T set (alias)
+BRVC		1111:01kk:kkkk:k011	# branch if flag "overflow" cleared
+BRVS		1111:00kk:kkkk:k011	# branch if flag "overflow" set
+BST		1111:101d:dddd:0bbb	# bit store to flag T
+SBRC		1111:110r:rrrr:0bbb	# skip if bit in regs cleared
+SBRS		1111:111r:rrrr:0bbb	# skip if bit in regs set
